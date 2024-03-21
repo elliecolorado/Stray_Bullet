@@ -40,7 +40,7 @@ namespace Com.Elrecoal.Stray_Bullet
             //Estados
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
             bool isJumping = jump && isGrounded;
-            bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
+            bool isSprinting = sprint && t_vmove > 0;
 
 
             //Salto
