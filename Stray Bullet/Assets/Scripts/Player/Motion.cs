@@ -18,11 +18,21 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public Camera normalCam;
 
+        public Transform weaponParent;
+
         public Transform groundDetector;
 
         public LayerMask ground;
 
         private Rigidbody rig;
+
+        private Vector3 targetWeaponBobPosition;
+
+        private Vector3 weaponParentOrigin;
+
+        public float movementCounter;
+
+        public float idleCounter;
 
         private float baseFOV;
 
@@ -41,93 +51,98 @@ namespace Com.Elrecoal.Stray_Bullet
 
             rig = GetComponent<Rigidbody>();
 
+            weaponParentOrigin = weaponParent.localPosition;
+
         }
 
         public void Update()
         {
 
-            #region Ejes
-
+            // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");
 
             float t_vmove = Input.GetAxisRaw("Vertical");
 
-            #endregion
-
-            #region Controles
-
+            // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
             bool jump = Input.GetKey(KeyCode.Space);
 
-            #endregion
-
-            #region Estados
-
+            // Estados
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
 
             bool isJumping = jump && isGrounded;
 
             bool isSprinting = sprint && t_vmove > 0;
 
-            #endregion
+            // Salto
+            if (isJumping) rig.AddForce(Vector3.up * jumpForce);
 
-            #region Salto
 
-            if (isJumping)
+            //Cabeceo y "respiracion"
+            if (t_hmove == 0 && t_vmove == 0)
             {
 
-                rig.AddForce(Vector3.up * jumpForce);
+                HeadBob(idleCounter, 0.02f, 0.02f);
+
+                idleCounter += Time.deltaTime;
+
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
+
+            }
+            else if (!isSprinting)
+            {
+
+                HeadBob(movementCounter, 0.035f, 0.035f);
+
+                movementCounter += Time.deltaTime * 3f;
+
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 6f);
+
+            }
+            else
+            {
+
+                HeadBob(movementCounter, 0.15f, 0.075f);
+
+                movementCounter += Time.deltaTime * 6f;
+
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);
 
             }
 
-            #endregion
 
         }
 
         private void FixedUpdate()
         {
 
-            #region Ejes
-
+            // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");
 
             float t_vmove = Input.GetAxisRaw("Vertical");
 
-            #endregion
 
-            #region Controles
-
+            // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
             bool jump = Input.GetKey(KeyCode.Space);
 
-            #endregion
-
-            #region Estados
-
+            // Estados
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
 
             bool isJumping = jump && isGrounded;
 
             bool isSprinting = sprint && t_vmove > 0;
 
-            #endregion
-
-            #region Movimiento
-
+            // Movimiento
             Vector3 t_direction = new Vector3(t_hmove, 0, t_vmove);
 
             t_direction.Normalize();
 
             float t_adjustedpeed = speed;
 
-            if (isSprinting)
-            {
-
-                t_adjustedpeed *= sprintModifier;
-
-            }
+            if (isSprinting) t_adjustedpeed *= sprintModifier;
 
             Vector3 t_targetVelocity = transform.TransformDirection(t_direction * t_adjustedpeed * Time.deltaTime);
 
@@ -135,24 +150,21 @@ namespace Com.Elrecoal.Stray_Bullet
 
             rig.velocity = t_targetVelocity;
 
-            #endregion
+            // Campo de vista
+            if (isSprinting) normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f);
 
-            #region Campo de vista
+            else normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f); ;
 
-            if (isSprinting)
-            {
+        }
 
-                normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f);
+        #endregion
 
-            }
-            else
-            {
+        #region Personal Methods
 
-                normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f); ;
+        void HeadBob(float p_z, float p_x_intensity, float p_y_intensity)
+        {
 
-            }
-
-            #endregion
+            targetWeaponBobPosition = weaponParentOrigin + new Vector3(Mathf.Cos(p_z) * p_x_intensity, Mathf.Sin(p_z * 2) * p_y_intensity, 0);
 
         }
 

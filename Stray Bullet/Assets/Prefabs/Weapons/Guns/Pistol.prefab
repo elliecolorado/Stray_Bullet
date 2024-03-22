@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3892501435793580372}
+  - component: {fileID: -6893240797518840684}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -33,6 +34,20 @@ Transform:
   - {fileID: 74730431631568640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6893240797518840684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526022236397120295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bf5a8c2857a7a541b2c24f33982b419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intensity: 10
+  smooth: 10
 --- !u!1 &807720007824978885
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +73,7 @@ Transform:
   m_GameObject: {fileID: 807720007824978885}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.152, y: -0.38, z: 0}
+  m_LocalPosition: {x: -0.183, y: -0.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -194,7 +209,7 @@ Transform:
   m_GameObject: {fileID: 4591909931673996777}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.507, y: 0.068, z: 0}
+  m_LocalPosition: {x: -0.507, y: -0.294, z: -0.248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -258,7 +273,7 @@ Transform:
   m_GameObject: {fileID: 6445283872096781970}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15200043, y: -0.38, z: 0}
+  m_LocalPosition: {x: -0.183, y: -0.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
