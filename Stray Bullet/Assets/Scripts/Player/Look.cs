@@ -2,72 +2,126 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Look : MonoBehaviour
+namespace Com.Elrecoal.Stray_Bullet
 {
-    //Atributos
-    public static bool cursorLocked = true;
 
-    public Transform player;
-    public Transform cams;
-    public Transform weapon;
-
-    public float xSensitivity;
-    public float ySensitivity;
-    public float maxAngle;
-
-    private Quaternion camCenter;
-    //Metodos de comienzo y update
-    public void Start()
+    public class Look : MonoBehaviour
     {
-        camCenter = cams.localRotation;
-    }
+        #region Variables
 
-    void Update()
-    {
-        SetX();
-        SetY();
+        public static bool cursorLocked = true;
 
-        UpdateCursorLock();
-    }
-    //Metodos de funcionalidad
-    void SetY()
-    {
-        float t_input = Input.GetAxis("Mouse Y") * ySensitivity * Time.deltaTime;
-        Quaternion t_adj = Quaternion.AngleAxis(t_input, -Vector3.right);
-        Quaternion t_delta = cams.localRotation * t_adj;
+        public Transform player;
 
-        if (Quaternion.Angle(camCenter, t_delta) < maxAngle)
+        public Transform cams;
+
+        public Transform weapon;
+
+        public float xSensitivity;
+
+        public float ySensitivity;
+
+        public float maxAngle;
+
+        private Quaternion camCenter;
+
+        #endregion
+
+        #region Unity Methods
+
+        public void Start()
         {
-            cams.localRotation = t_delta;
-            weapon.localRotation = t_delta;
+
+            camCenter = cams.localRotation; //Pone el origen de rotación de las cámaras a camCencer
+
         }
-    }
-    void SetX()
-    {
-        float t_input = Input.GetAxis("Mouse X") * xSensitivity * Time.deltaTime;
-        Quaternion t_adj = Quaternion.AngleAxis(t_input, Vector3.up);
-        Quaternion t_delta = player.localRotation * t_adj;
-        player.localRotation = t_delta;
-    }
-    void UpdateCursorLock()
-    {
-        if (cursorLocked)
+
+        void Update()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            if (Input.GetKeyDown(KeyCode.Escape))
+
+            SetX();
+
+            SetY();
+
+            UpdateCursorLock();
+
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        void SetY()
+        {
+
+            float t_input = Input.GetAxis("Mouse Y") * ySensitivity * Time.deltaTime;
+
+            Quaternion t_adj = Quaternion.AngleAxis(t_input, -Vector3.right);
+
+            Quaternion t_delta = cams.localRotation * t_adj;
+
+            if (Quaternion.Angle(camCenter, t_delta) < maxAngle)
             {
-                cursorLocked = false;
+
+                cams.localRotation = t_delta;
+
+                weapon.localRotation = t_delta;
+
             }
+
         }
-        else
+
+        void SetX()
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                cursorLocked = true;
-            }
+
+            float t_input = Input.GetAxis("Mouse X") * xSensitivity * Time.deltaTime;
+
+            Quaternion t_adj = Quaternion.AngleAxis(t_input, Vector3.up);
+
+            Quaternion t_delta = player.localRotation * t_adj;
+
+            player.localRotation = t_delta;
+
         }
+
+        void UpdateCursorLock()
+        {
+
+            if (cursorLocked)
+            {
+
+                Cursor.lockState = CursorLockMode.Locked;
+
+                Cursor.visible = false;
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+
+                    cursorLocked = false;
+
+                }
+
+            }
+            else
+            {
+
+                Cursor.lockState = CursorLockMode.None;
+
+                Cursor.visible = true;
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+
+                    cursorLocked = true;
+
+                }
+
+            }
+
+        }
+
+        #endregion
+
     }
+
 }

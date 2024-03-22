@@ -2,39 +2,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public Gun[] loadout;
-    public Transform weaponParent;
-    private GameObject currentEquipment;
-
-    void Start()
+    public class Weapon : MonoBehaviour
     {
 
-    }
+        #region Variables
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        public Gun[] loadout;
+
+        public Transform weaponParent;
+
+        private GameObject currentEquipment;
+
+        #endregion
+
+        #region Unity Methods
+
+        void Update()
         {
-            Equip(0);
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+
+                Equip(0);
+
+            }
+
         }
-    }
 
-    void Equip(int p_ind)
-    {
+        #endregion
 
-        if(currentEquipment != null)
+        #region Personal Methods
+
+        void Equip(int p_ind)
         {
-            Destroy(currentEquipment);
+
+            if (currentEquipment != null)
+            {
+
+                Destroy(currentEquipment);
+
+            }
+
+            GameObject t_newEquipment = Instantiate(loadout[p_ind].prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
+
+            t_newEquipment.transform.localPosition = Vector3.zero;
+
+            t_newEquipment.transform.localEulerAngles = Vector3.zero;
+
+            currentEquipment = t_newEquipment;
+
         }
 
-        GameObject t_newEquipment = Instantiate(loadout[p_ind].prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
-        t_newEquipment.transform.localPosition = Vector3.zero;
-        t_newEquipment.transform.localEulerAngles = Vector3.zero;
+        #endregion
 
-        currentEquipment = t_newEquipment;
     }
 
 }
