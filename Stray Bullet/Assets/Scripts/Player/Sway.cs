@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+
 
 namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public class Sway : MonoBehaviour
+    public class Sway : MonoBehaviourPunCallbacks
     {
 
         #region Variables
@@ -29,6 +31,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private void Update()
         {
+
+            if (!photonView.IsMine) return;
 
             UpdateSway();
 
