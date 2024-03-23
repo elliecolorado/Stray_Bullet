@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+
 
 namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public class Look : MonoBehaviour
+    public class Look : MonoBehaviourPunCallbacks
     {
         #region Variables
 
@@ -38,6 +40,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         void Update()
         {
+
+            if (!photonView.IsMine) return;
 
             SetX();
 
