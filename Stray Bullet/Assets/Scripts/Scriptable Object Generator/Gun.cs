@@ -12,6 +12,12 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public string name;
 
+        public float bloom;
+
+        public float recoil;
+
+        public float kickback;
+
         public float rateOfFire;
 
         public float aimSpeed;
