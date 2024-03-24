@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public class Motion : MonoBehaviourPunCallbacks
+    public class Motion : MonoBehaviour
     {
 
         #region Variables
@@ -18,8 +17,6 @@ namespace Com.Elrecoal.Stray_Bullet
         public float jumpForce;
 
         public Camera normalCam;
-
-        public GameObject cameraParent;
 
         public Transform weaponParent;
 
@@ -48,10 +45,9 @@ namespace Com.Elrecoal.Stray_Bullet
         public void Start()
         {
 
-            cameraParent.SetActive(photonView.IsMine);
-
             baseFOV = normalCam.fieldOfView;
-            if (Camera.main) Camera.main.enabled = false;
+
+            Camera.main.enabled = false;
 
             rig = GetComponent<Rigidbody>();
 
@@ -61,8 +57,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public void Update()
         {
-
-            if (!photonView.IsMine) return;
 
             // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");
@@ -122,8 +116,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private void FixedUpdate()
         {
-
-            if (!photonView.IsMine) return;
 
             // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");

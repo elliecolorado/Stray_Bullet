@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-
 
 namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public class Weapon : MonoBehaviourPunCallbacks
+    public class Weapon : MonoBehaviour
     {
 
         #region Variables
@@ -33,8 +31,6 @@ namespace Com.Elrecoal.Stray_Bullet
         void Update()
         {
 
-            if (!photonView.IsMine) return;
-
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
 
@@ -55,10 +51,7 @@ namespace Com.Elrecoal.Stray_Bullet
                 }
 
                 //Weapon position elasticity
-                if (currentEquipment != null)
-                {
-                    currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
-                }
+                currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
 
                 //Cooldown
                 if (currentCooldown > 0)
@@ -93,8 +86,6 @@ namespace Com.Elrecoal.Stray_Bullet
             t_newEquipment.transform.localPosition = Vector3.zero;
 
             t_newEquipment.transform.localEulerAngles = Vector3.zero;
-
-            t_newEquipment.GetComponent<Sway>().enabled = photonView.IsMine;
 
             currentEquipment = t_newEquipment;
 
