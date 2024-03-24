@@ -35,38 +35,20 @@ namespace Com.Elrecoal.Stray_Bullet
 
             if (!photonView.IsMine) return;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-
-                Equip(0);
-
-            }
+            if (Input.GetKeyDown(KeyCode.Alpha1)) { photonView.RPC("Equip", RpcTarget.All, 0); }
 
             if (currentEquipment != null)
             {
 
                 Aim(Input.GetMouseButton(1));
 
-                if (Input.GetMouseButton(0) && currentCooldown <= 0)
-                {
-
-                    Shoot();
-
-                }
+                if (Input.GetMouseButton(0) && currentCooldown <= 0) { photonView.RPC("Shoot", RpcTarget.All); }
 
                 //Weapon position elasticity
-                if (currentEquipment != null)
-                {
-                    currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
-                }
+                if (currentEquipment != null) currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
 
                 //Cooldown
-                if (currentCooldown > 0)
-                {
-
-                    currentCooldown -= Time.deltaTime;
-
-                }
+                if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
 
             }
 
@@ -76,15 +58,11 @@ namespace Com.Elrecoal.Stray_Bullet
 
         #region Personal Methods
 
+        [PunRPC]
         void Equip(int p_ind)
         {
 
-            if (currentEquipment != null)
-            {
-
-                Destroy(currentEquipment);
-
-            }
+            if (currentEquipment != null) Destroy(currentEquipment);
 
             currentIndex = p_ind;
 
@@ -109,21 +87,13 @@ namespace Com.Elrecoal.Stray_Bullet
 
             Transform t_state_hip = currentEquipment.transform.Find("States/Hip");
 
-            if (p_isAiming)
-            {
+            if (p_isAiming) t_anchor.position = Vector3.Lerp(t_anchor.position, t_state_ads.position, Time.deltaTime * loadout[currentIndex].aimSpeed);
 
-                t_anchor.position = Vector3.Lerp(t_anchor.position, t_state_ads.position, Time.deltaTime * loadout[currentIndex].aimSpeed);
-
-            }
-            else
-            {
-
-                t_anchor.position = Vector3.Lerp(t_anchor.position, t_state_hip.position, Time.deltaTime * loadout[currentIndex].aimSpeed);
-
-            }
+            else t_anchor.position = Vector3.Lerp(t_anchor.position, t_state_hip.position, Time.deltaTime * loadout[currentIndex].aimSpeed);
 
         }
 
+        [PunRPC]
         void Shoot()
         {
 
@@ -140,6 +110,9 @@ namespace Com.Elrecoal.Stray_Bullet
 
             t_bloom.Normalize();
 
+            //Cooldown (segundos que tarda en poder volver a disparar)
+            currentCooldown = loadout[currentIndex].rateOfFire;
+
             //Raycast
             RaycastHit t_hit = new RaycastHit();
 
@@ -151,14 +124,26 @@ namespace Com.Elrecoal.Stray_Bullet
                 t_newBulletHole.transform.LookAt(t_hit.point + t_hit.normal);
 
                 Destroy(t_newBulletHole, 5);
+
+                if(photonView.IsMine)
+                {
+
+                    //Shooting a player
+                    if(t_hit.collider.gameObject.layer == 11)
+                    {
+
+                        //RpcTarget call to damage player
+
+                    }
+
+                }
+
             }
 
             //Gun effect
             currentEquipment.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
-            currentEquipment.transform.position -= currentEquipment.transform.forward * loadout[currentIndex].kickback;
 
-            //Cooldown (segundos que tarda en poder volver a disparar)
-            currentCooldown = loadout[currentIndex].rateOfFire;
+            currentEquipment.transform.position -= currentEquipment.transform.forward * loadout[currentIndex].kickback;
 
         }
 

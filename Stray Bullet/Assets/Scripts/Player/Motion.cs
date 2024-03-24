@@ -50,7 +50,10 @@ namespace Com.Elrecoal.Stray_Bullet
 
             cameraParent.SetActive(photonView.IsMine);
 
+            if (!photonView.IsMine) gameObject.layer = 11;
+
             baseFOV = normalCam.fieldOfView;
+
             if (Camera.main) Camera.main.enabled = false;
 
             rig = GetComponent<Rigidbody>();
