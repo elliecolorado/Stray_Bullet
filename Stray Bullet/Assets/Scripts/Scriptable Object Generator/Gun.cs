@@ -12,6 +12,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public string name;
 
+        public int damage;
+
         public float bloom;
 
         public float recoil;
@@ -25,4 +27,5 @@ namespace Com.Elrecoal.Stray_Bullet
         public GameObject prefab;
 
     }
+
 }

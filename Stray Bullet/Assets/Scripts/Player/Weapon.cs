@@ -33,22 +33,25 @@ namespace Com.Elrecoal.Stray_Bullet
         void Update()
         {
 
-            if (!photonView.IsMine) return;
-
-            if (Input.GetKeyDown(KeyCode.Alpha1)) { photonView.RPC("Equip", RpcTarget.All, 0); }
+            if (photonView.IsMine && Input.GetKeyDown(KeyCode.Alpha1)) photonView.RPC("Equip", RpcTarget.All, 0);
 
             if (currentEquipment != null)
             {
 
-                Aim(Input.GetMouseButton(1));
+                if (photonView.IsMine)
+                {
 
-                if (Input.GetMouseButton(0) && currentCooldown <= 0) { photonView.RPC("Shoot", RpcTarget.All); }
+                    Aim(Input.GetMouseButton(1));
+
+                    if (Input.GetMouseButton(0) && currentCooldown <= 0) photonView.RPC("Shoot", RpcTarget.All);
+
+                    //Cooldown
+                    if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
+
+                }
 
                 //Weapon position elasticity
-                if (currentEquipment != null) currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
-
-                //Cooldown
-                if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
+                currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
 
             }
 
@@ -72,7 +75,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
             t_newEquipment.transform.localEulerAngles = Vector3.zero;
 
-            t_newEquipment.GetComponent<Sway>().enabled = photonView.IsMine;
+            t_newEquipment.GetComponent<Sway>().isMine = photonView.IsMine;
 
             currentEquipment = t_newEquipment;
 
@@ -125,14 +128,15 @@ namespace Com.Elrecoal.Stray_Bullet
 
                 Destroy(t_newBulletHole, 5);
 
-                if(photonView.IsMine)
+                if (photonView.IsMine)
                 {
 
                     //Shooting a player
-                    if(t_hit.collider.gameObject.layer == 11)
+                    if (t_hit.collider.gameObject.layer == 11)
                     {
 
                         //RpcTarget call to damage player
+                        t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
 
                     }
 
@@ -144,6 +148,14 @@ namespace Com.Elrecoal.Stray_Bullet
             currentEquipment.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
 
             currentEquipment.transform.position -= currentEquipment.transform.forward * loadout[currentIndex].kickback;
+
+        }
+
+        [PunRPC]
+        void TakeDamage(int p_damage)
+        {
+
+            GetComponent<Motion>().TakeDamage(p_damage);
 
         }
 

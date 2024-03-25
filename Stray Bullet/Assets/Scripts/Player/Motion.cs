@@ -17,6 +17,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public float jumpForce;
 
+        public int max_health;
+
         public Camera normalCam;
 
         public GameObject cameraParent;
@@ -41,12 +43,20 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private float sprintFOVModifier = 1.25f;
 
+        private int current_health;
+
+        private Manager manager;
+
         #endregion
 
         #region Unity Methods
 
         public void Start()
         {
+
+            manager = GameObject.Find("Manager").GetComponent<Manager>();
+
+            current_health = max_health;
 
             cameraParent.SetActive(photonView.IsMine);
 
@@ -87,7 +97,6 @@ namespace Com.Elrecoal.Stray_Bullet
             // Salto
             if (isJumping) rig.AddForce(Vector3.up * jumpForce);
 
-
             //Cabeceo y "respiracion"
             if (t_hmove == 0 && t_vmove == 0)
             {
@@ -127,6 +136,8 @@ namespace Com.Elrecoal.Stray_Bullet
         {
 
             if (!photonView.IsMine) return;
+
+            if (Input.GetKeyDown(KeyCode.U)) TakeDamage(1001);
 
             // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");
@@ -176,6 +187,29 @@ namespace Com.Elrecoal.Stray_Bullet
         {
 
             targetWeaponBobPosition = weaponParentOrigin + new Vector3(Mathf.Cos(p_z) * p_x_intensity, Mathf.Sin(p_z * 2) * p_y_intensity, 0);
+
+        }
+
+        public void TakeDamage(int p_damage)
+        {
+
+            if (photonView.IsMine)
+            {
+
+                current_health -= p_damage;
+
+                Debug.Log(current_health);
+
+                if (current_health <= 0)
+                {
+
+                    manager.Spawn();
+
+                    PhotonNetwork.Destroy(gameObject);
+
+                }
+
+            }
 
         }
 

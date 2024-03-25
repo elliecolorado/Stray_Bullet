@@ -14,7 +14,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public string player_prefab;
 
-        public Transform spawn_point;
+        public Transform[] spawn_points;
 
         private IEnumerator Start()
         {
@@ -28,7 +28,9 @@ namespace Com.Elrecoal.Stray_Bullet
         public void Spawn()
         {
 
-            PhotonNetwork.Instantiate(player_prefab, spawn_point.position, spawn_point.rotation);
+            Transform t_spawn = spawn_points[UnityEngine.Random.Range(0,spawn_points.Length)];
+
+            PhotonNetwork.Instantiate(player_prefab, t_spawn.position, t_spawn.rotation);
 
         }
 
