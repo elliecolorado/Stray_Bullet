@@ -6,7 +6,7 @@ using Photon.Pun;
 namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public class Motion : MonoBehaviourPunCallbacks
+    public class Player : MonoBehaviourPunCallbacks
     {
 
         #region Variables

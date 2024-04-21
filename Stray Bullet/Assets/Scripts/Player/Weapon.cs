@@ -9,7 +9,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
     public class Weapon : MonoBehaviourPunCallbacks
     {
-
+        //-----------------------------------Mover todo a player-----------------------------------
         #region Variables
 
         public Gun[] loadout;
@@ -33,7 +33,16 @@ namespace Com.Elrecoal.Stray_Bullet
         void Update()
         {
 
-            if (photonView.IsMine && Input.GetKeyDown(KeyCode.Alpha1)) photonView.RPC("Equip", RpcTarget.All, 0);
+            if (photonView.IsMine)
+            {
+
+                if (Input.GetKeyDown(KeyCode.Alpha1)) photonView.RPC("Equip", RpcTarget.All, 0);
+                if (Input.GetKeyDown(KeyCode.Alpha2)) photonView.RPC("Equip", RpcTarget.All, 1);
+                if (Input.GetKeyDown(KeyCode.Alpha3)) photonView.RPC("Equip", RpcTarget.All, 2);
+                if (Input.GetKeyDown(KeyCode.Alpha4)) photonView.RPC("Equip", RpcTarget.All, 3);
+                if (Input.GetKeyDown(KeyCode.Alpha5)) photonView.RPC("Equip", RpcTarget.All, 4);
+
+            }
 
             if (currentEquipment != null)
             {
@@ -64,20 +73,24 @@ namespace Com.Elrecoal.Stray_Bullet
         [PunRPC]
         void Equip(int p_ind)
         {
+            //-----------------------------------Usar rueda del ratón para ciclar entre armas (tener en cuenta final de loadout y volver a empezar o poner el ultimo arma de limite?)-----------------------------------
+            if (p_ind < loadout.Length)
+            {
 
-            if (currentEquipment != null) Destroy(currentEquipment);
+                if (currentEquipment != null) Destroy(currentEquipment);
 
-            currentIndex = p_ind;
+                currentIndex = p_ind;
 
-            GameObject t_newEquipment = Instantiate(loadout[p_ind].prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
+                GameObject t_newEquipment = Instantiate(loadout[p_ind].prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
 
-            t_newEquipment.transform.localPosition = Vector3.zero;
+                t_newEquipment.transform.localPosition = Vector3.zero;
 
-            t_newEquipment.transform.localEulerAngles = Vector3.zero;
+                t_newEquipment.transform.localEulerAngles = Vector3.zero;
 
-            t_newEquipment.GetComponent<Sway>().isMine = photonView.IsMine;
+                t_newEquipment.GetComponent<Sway>().isMine = photonView.IsMine;
 
-            currentEquipment = t_newEquipment;
+                currentEquipment = t_newEquipment;
+            }
 
         }
 
@@ -121,7 +134,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
             if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
             {
-
+                //-----------------------------------Modificar si añado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
                 GameObject t_newBulletHole = Instantiate(bulletHolePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
 
                 t_newBulletHole.transform.LookAt(t_hit.point + t_hit.normal);
@@ -155,7 +168,7 @@ namespace Com.Elrecoal.Stray_Bullet
         void TakeDamage(int p_damage)
         {
 
-            GetComponent<Motion>().TakeDamage(p_damage);
+            GetComponent<Player>().TakeDamage(p_damage);
 
         }
 

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56e41bfa77ea0fd4cbc8634e6809ab7f, type: 3}
-  m_Name: Pistol
+  m_Name: Automatic Rifle
   m_EditorClassIdentifier: 
-  name: Pistol
-  damage: 100
+  name: Automatic Rifle
+  damage: 50
   bloom: 20
   recoil: 10
-  kickback: 0.1
-  rateOfFire: 0.4
+  kickback: 0.05
+  rateOfFire: 0.2
   aimSpeed: 7
-  prefab: {fileID: 526022236397120295, guid: 01db0bb20b8395440b96617b4a62be5c, type: 3}
+  prefab: {fileID: 526022236397120295, guid: 9a0421434864ce74a92b297a5745adcd, type: 3}
