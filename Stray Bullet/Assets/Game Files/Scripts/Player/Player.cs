@@ -47,6 +47,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private Manager manager;
 
+        private Transform ui_healthBar;
+
         #endregion
 
         #region Unity Methods
@@ -69,6 +71,16 @@ namespace Com.Elrecoal.Stray_Bullet
             rig = GetComponent<Rigidbody>();
 
             weaponParentOrigin = weaponParent.localPosition;
+
+            if (photonView.IsMine)
+            {
+
+                ui_healthBar = GameObject.Find("HUD/Health/Bar").transform;
+
+                RefreshHealthBar();
+
+            }
+
 
         }
 
@@ -129,6 +141,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
             }
 
+            RefreshHealthBar();
 
         }
 
@@ -183,6 +196,15 @@ namespace Com.Elrecoal.Stray_Bullet
 
         #region Personal Methods
 
+        void RefreshHealthBar()
+        {
+
+            float t_health_ratio = (float)current_health / (float)max_health;
+
+            ui_healthBar.localScale = Vector3.Lerp(ui_healthBar.localScale, new Vector3(t_health_ratio, 1, 1), Time.deltaTime * 8f);
+
+        }
+
         void HeadBob(float p_z, float p_x_intensity, float p_y_intensity)
         {
 
@@ -199,6 +221,8 @@ namespace Com.Elrecoal.Stray_Bullet
                 current_health -= p_damage;
 
                 Debug.Log(current_health);
+
+                RefreshHealthBar();
 
                 if (current_health <= 0)
                 {

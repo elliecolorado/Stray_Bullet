@@ -135,6 +135,7 @@ namespace Com.Elrecoal.Stray_Bullet
             if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
             {
                 //-----------------------------------Modificar si añado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
+                //-----------------------------------Modificar para que las balas no se pongan en la cara de los jugadores y solucionar el que apunte siempre hacia delante-----------------------------------
                 GameObject t_newBulletHole = Instantiate(bulletHolePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
 
                 t_newBulletHole.transform.LookAt(t_hit.point + t_hit.normal);
