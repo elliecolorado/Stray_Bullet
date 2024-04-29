@@ -1135,7 +1135,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1441,30 +1441,6 @@ PrefabInstance:
     - target: {fileID: 2633109975874247510, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8099357527666602824, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 407.8328
-      objectReference: {fileID: 0}
-    - target: {fileID: 8099357527666602824, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 40.7832
-      objectReference: {fileID: 0}
-    - target: {fileID: 8181237876994491435, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 401.3074
-      objectReference: {fileID: 0}
-    - target: {fileID: 8181237876994491435, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 34.258
-      objectReference: {fileID: 0}
-    - target: {fileID: 8181237876994491435, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 29
-      objectReference: {fileID: 0}
-    - target: {fileID: 8181237876994491435, guid: 0999079ed59bca84292a7e7b16dfe16e, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 34
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

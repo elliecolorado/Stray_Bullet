@@ -16,6 +16,12 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public float bloom;
 
+        public float reload;
+
+        public int ammo;
+
+        public int clipSize;
+
         public float recoil;
 
         public float kickback;
@@ -25,6 +31,37 @@ namespace Com.Elrecoal.Stray_Bullet
         public float aimSpeed;
 
         public GameObject prefab;
+
+        private int stash; //Current ammo
+
+        private int clip; //Current clip
+
+        public void Init()
+        {
+            stash = ammo;
+            clip = clipSize;
+        }
+
+        public bool FireBullet()
+        {
+            if (clip > 0)
+            {
+                clip -= 1;
+                return true;
+            }
+            else return false;
+        }
+
+        public void Reload()
+        {
+            stash += clip;
+            clip = Mathf.Min(clipSize, stash);
+            stash -= clip;
+        }
+
+        public int GetStash() { return stash; }
+
+        public int GetClip() { return clip; }
 
     }
 

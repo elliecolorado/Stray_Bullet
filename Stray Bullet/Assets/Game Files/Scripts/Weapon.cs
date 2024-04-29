@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 
 namespace Com.Elrecoal.Stray_Bullet
@@ -26,9 +28,19 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private int currentIndex;
 
+        private bool isReloading;
+
         #endregion
 
         #region Unity Methods
+
+        private void Start()
+        {
+            foreach (Gun g in loadout) g.Init();
+
+            Equip(0);
+
+        }
 
         void Update()
         {
@@ -52,7 +64,15 @@ namespace Com.Elrecoal.Stray_Bullet
 
                     Aim(Input.GetMouseButton(1));
 
-                    if (Input.GetMouseButton(0) && currentCooldown <= 0) photonView.RPC("Shoot", RpcTarget.All);
+                    if (Input.GetMouseButton(0) && currentCooldown <= 0 && !isReloading)
+                    {
+                        if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
+
+                        else StartCoroutine(Reload(loadout[currentIndex].reload));
+
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.R) && !isReloading) StartCoroutine(Reload(loadout[currentIndex].reload));
 
                     //Cooldown
                     if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
@@ -70,14 +90,46 @@ namespace Com.Elrecoal.Stray_Bullet
 
         #region Personal Methods
 
+        public void RefreshAmmo(TMP_Text p_text)
+        {
+
+            int t_clip = loadout[currentIndex].GetClip();
+
+            int t_stash = loadout[currentIndex].GetStash();
+
+            p_text.text = t_clip.ToString("D2") + " / " + t_stash.ToString("D2");
+
+        }
+
+        IEnumerator Reload(float p_wait)
+        {
+
+            isReloading = true;
+
+            currentEquipment.SetActive(false);
+
+            yield return new WaitForSeconds(p_wait);
+
+            loadout[currentIndex].Reload();
+
+            currentEquipment.SetActive(true);
+
+            isReloading = false;
+
+        }
+
         [PunRPC]
         void Equip(int p_ind)
         {
-            //-----------------------------------Usar rueda del ratón para ciclar entre armas (tener en cuenta final de loadout y volver a empezar o poner el ultimo arma de limite?)-----------------------------------
+            //-----------------------------------Usar rueda del ratï¿½n para ciclar entre armas (tener en cuenta final de loadout y volver a empezar o poner el ultimo arma de limite?)-----------------------------------
             if (p_ind < loadout.Length)
             {
 
-                if (currentEquipment != null) Destroy(currentEquipment);
+                if (currentEquipment != null)
+                {
+                    StopCoroutine("Reload");
+                    Destroy(currentEquipment);
+                }
 
                 currentIndex = p_ind;
 
@@ -134,7 +186,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
             if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
             {
-                //-----------------------------------Modificar si añado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
+                //-----------------------------------Modificar si aï¿½ado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
                 //-----------------------------------Modificar para que las balas no se pongan en la cara de los jugadores y solucionar el que apunte siempre hacia delante-----------------------------------
                 GameObject t_newBulletHole = Instantiate(bulletHolePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
 

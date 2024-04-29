@@ -1,7 +1,9 @@
 using System.Collections;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
@@ -47,7 +49,11 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private Manager manager;
 
+        private Weapon weapon;
+
         private Transform ui_healthBar;
+
+        private TMP_Text ui_ammo;
 
         #endregion
 
@@ -57,6 +63,8 @@ namespace Com.Elrecoal.Stray_Bullet
         {
 
             manager = GameObject.Find("Manager").GetComponent<Manager>();
+
+            weapon = this.GetComponent<Weapon>();
 
             current_health = max_health;
 
@@ -76,6 +84,8 @@ namespace Com.Elrecoal.Stray_Bullet
             {
 
                 ui_healthBar = GameObject.Find("HUD/Health/Bar").transform;
+
+                ui_ammo = GameObject.Find("HUD/Ammo/Text").GetComponent<TMP_Text>();
 
                 RefreshHealthBar();
 
@@ -142,6 +152,8 @@ namespace Com.Elrecoal.Stray_Bullet
             }
 
             RefreshHealthBar();
+
+            weapon.RefreshAmmo(ui_ammo);
 
         }
 

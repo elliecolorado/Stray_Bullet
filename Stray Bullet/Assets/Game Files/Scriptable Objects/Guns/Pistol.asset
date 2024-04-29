@@ -15,6 +15,9 @@ MonoBehaviour:
   name: Pistol
   damage: 100
   bloom: 20
+  reload: 2
+  ammo: 24
+  clipSize: 6
   recoil: 10
   kickback: 0.1
   rateOfFire: 0.4
