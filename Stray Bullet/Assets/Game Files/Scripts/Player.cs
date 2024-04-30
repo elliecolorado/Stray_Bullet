@@ -14,46 +14,35 @@ namespace Com.Elrecoal.Stray_Bullet
         #region Variables
 
         public float speed;
-
         public float sprintModifier;
-
         public float jumpForce;
-
+        public float lengthOfSlide;
+        public float slideModifier;
         public int max_health;
-
         public Camera normalCam;
-
         public GameObject cameraParent;
-
         public Transform weaponParent;
-
         public Transform groundDetector;
-
         public LayerMask ground;
 
         private Rigidbody rig;
-
         private Vector3 targetWeaponBobPosition;
-
         private Vector3 weaponParentOrigin;
-
         public float movementCounter;
-
         public float idleCounter;
 
         private float baseFOV;
-
         private float sprintFOVModifier = 1.25f;
 
         private int current_health;
-
         private Manager manager;
-
         private Weapon weapon;
-
         private Transform ui_healthBar;
-
         private TMP_Text ui_ammo;
+
+        private bool sliding;
+        private float slide_time;
+        private Vector3 slide_direction;
 
         #endregion
 
@@ -107,17 +96,19 @@ namespace Com.Elrecoal.Stray_Bullet
             // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
-            bool jump = Input.GetKey(KeyCode.Space);
+            bool jump = Input.GetKeyDown(KeyCode.Space);
 
             // Estados
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
 
             bool isJumping = jump && isGrounded;
 
-            bool isSprinting = sprint && t_vmove > 0;
+            bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
 
             // Salto
             if (isJumping) rig.AddForce(Vector3.up * jumpForce);
+
+            if (Input.GetKeyDown(KeyCode.U)) TakeDamage(1001);
 
             //Cabeceo y "respiracion"
             if (t_hmove == 0 && t_vmove == 0)
@@ -151,6 +142,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
             }
 
+            //Actualizacion de interfaz
             RefreshHealthBar();
 
             weapon.RefreshAmmo(ui_ammo);
@@ -161,45 +153,66 @@ namespace Com.Elrecoal.Stray_Bullet
         {
 
             if (!photonView.IsMine) return;
-
-            if (Input.GetKeyDown(KeyCode.U)) TakeDamage(1001);
+            if (Input.GetKeyDown(KeyCode.U)) TakeDamage(1001); //Botón temporal para forzar reaparición
 
             // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");
-
             float t_vmove = Input.GetAxisRaw("Vertical");
-
 
             // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-
             bool jump = Input.GetKey(KeyCode.Space);
+            bool slide = Input.GetKey(KeyCode.LeftControl);
 
             // Estados
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
-
             bool isJumping = jump && isGrounded;
-
             bool isSprinting = sprint && t_vmove > 0;
+            bool isSliding = isSprinting && slide && !sliding;
 
             // Movimiento
-            Vector3 t_direction = new Vector3(t_hmove, 0, t_vmove);
-
-            t_direction.Normalize();
-
+            Vector3 t_direction = Vector3.zero;
             float t_adjustedpeed = speed;
+            if (!sliding)
+            {
+                t_direction = new Vector3(t_hmove, 0, t_vmove);
+                t_direction.Normalize();
+                t_direction = transform.TransformDirection(t_direction);
 
-            if (isSprinting) t_adjustedpeed *= sprintModifier;
+                if (isSprinting) t_adjustedpeed *= sprintModifier;
+            }
+            else
+            {
+                t_direction = slide_direction;
+                t_adjustedpeed *= slideModifier;
+                slide_time -= Time.deltaTime;
+                if (slide_time <= 0)
+                {
+                    sliding = false;
+                    normalCam.transform.localPosition -= Vector3.down * 0.5f;
+                }
+            }
 
-            Vector3 t_targetVelocity = transform.TransformDirection(t_direction * t_adjustedpeed * Time.deltaTime);
-
+            Vector3 t_targetVelocity = t_direction * t_adjustedpeed * Time.deltaTime;
             t_targetVelocity.y = rig.velocity.y;
-
             rig.velocity = t_targetVelocity;
 
-            // Campo de vista
-            if (isSprinting) normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f);
 
+            //Sliding
+            if (isSliding)
+            {
+                sliding = true;
+                slide_direction = t_direction;
+                slide_time = lengthOfSlide;
+                normalCam.transform.localPosition -= Vector3.up * 0.5f;
+            }
+
+            // Cosas de la cámara
+            if (sliding)
+            {
+                normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier * 0.75f, Time.deltaTime * 8f);
+            }
+            else if (isSprinting) normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f);
             else normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f); ;
 
         }

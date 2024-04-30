@@ -68,11 +68,11 @@ namespace Com.Elrecoal.Stray_Bullet
                     {
                         if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
 
-                        else StartCoroutine(Reload(loadout[currentIndex].reload));
+                        else if (loadout[currentIndex].GetStash() > 0) StartCoroutine(Reload(loadout[currentIndex].reload));
 
                     }
 
-                    if (Input.GetKeyDown(KeyCode.R) && !isReloading) StartCoroutine(Reload(loadout[currentIndex].reload));
+                    if (Input.GetKeyDown(KeyCode.R) && !isReloading && loadout[currentIndex].GetStash() > 0) StartCoroutine(Reload(loadout[currentIndex].reload));
 
                     //Cooldown
                     if (currentCooldown > 0) currentCooldown -= Time.deltaTime;

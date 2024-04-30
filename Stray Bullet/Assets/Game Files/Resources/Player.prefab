@@ -492,6 +492,8 @@ MonoBehaviour:
   speed: 500
   sprintModifier: 2
   jumpForce: 50
+  lengthOfSlide: 1
+  slideModifier: 3
   max_health: 1000
   normalCam: {fileID: 7052984284206025818}
   cameraParent: {fileID: 5980622629921903488}
