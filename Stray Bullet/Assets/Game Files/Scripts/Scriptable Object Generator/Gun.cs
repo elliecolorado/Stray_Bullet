@@ -38,30 +38,54 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public void Init()
         {
+
             stash = ammo;
+
             clip = clipSize;
+
         }
 
         public bool FireBullet()
         {
+
             if (clip > 0)
             {
+
                 clip -= 1;
+
                 return true;
+
             }
-            else return false;
+
+            else
+            {
+
+                return false;
+
+            }
+
         }
 
         public void Reload()
         {
+
             stash += clip;
+
             clip = Mathf.Min(clipSize, stash);
+
             stash -= clip;
+
         }
 
-        public int GetStash() { return stash; }
+        public int GetStash()
+        {
+            return stash;
+        }
 
-        public int GetClip() { return clip; }
+        public int GetClip()
+        {
+            return clip;
+        }
 
     }
 

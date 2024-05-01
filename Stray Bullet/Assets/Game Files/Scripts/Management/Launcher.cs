@@ -78,7 +78,7 @@ namespace Com.Elrecoal.Stray_Bullet
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
 
-                //-----------------------------------Modificar segun requisitos (ahora mismo carga la pantalla de DevSpace-----------------------------------
+                //-----------------------------------Modificar segun requisitos (ahora mismo carga la pantalla de DevSpace)-----------------------------------
                 PhotonNetwork.LoadLevel(1); 
 
             }

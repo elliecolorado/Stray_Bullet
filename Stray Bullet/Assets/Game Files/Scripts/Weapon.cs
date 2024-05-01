@@ -11,18 +11,18 @@ namespace Com.Elrecoal.Stray_Bullet
 
     public class Weapon : MonoBehaviourPunCallbacks
     {
-        //-----------------------------------Mover todo a player-----------------------------------
+
         #region Variables
 
         public Gun[] loadout;
 
         public Transform weaponParent;
 
-        private GameObject currentEquipment;
-
         public GameObject bulletHolePrefab;
 
         public LayerMask canBeShot;
+
+        private GameObject currentEquipment;
 
         private float currentCooldown = 0;
 
@@ -49,9 +49,13 @@ namespace Com.Elrecoal.Stray_Bullet
             {
 
                 if (Input.GetKeyDown(KeyCode.Alpha1)) photonView.RPC("Equip", RpcTarget.All, 0);
+
                 if (Input.GetKeyDown(KeyCode.Alpha2)) photonView.RPC("Equip", RpcTarget.All, 1);
+
                 if (Input.GetKeyDown(KeyCode.Alpha3)) photonView.RPC("Equip", RpcTarget.All, 2);
+
                 if (Input.GetKeyDown(KeyCode.Alpha4)) photonView.RPC("Equip", RpcTarget.All, 3);
+
                 if (Input.GetKeyDown(KeyCode.Alpha5)) photonView.RPC("Equip", RpcTarget.All, 4);
 
             }
@@ -121,14 +125,18 @@ namespace Com.Elrecoal.Stray_Bullet
         [PunRPC]
         void Equip(int p_ind)
         {
+            
             //-----------------------------------Usar rueda del rat�n para ciclar entre armas (tener en cuenta final de loadout y volver a empezar o poner el ultimo arma de limite?)-----------------------------------
             if (p_ind < loadout.Length)
             {
 
                 if (currentEquipment != null)
                 {
+
                     StopCoroutine("Reload");
+
                     Destroy(currentEquipment);
+
                 }
 
                 currentIndex = p_ind;

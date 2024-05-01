@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &333454448730464210
 Transform:
   m_ObjectHideFlags: 0
@@ -491,9 +491,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 500
   sprintModifier: 2
-  jumpForce: 50
+  jumpForce: 1000
   lengthOfSlide: 1
   slideModifier: 3
+  movementCounter: 0
+  idleCounter: 0
   max_health: 1000
   normalCam: {fileID: 7052984284206025818}
   cameraParent: {fileID: 5980622629921903488}
@@ -502,8 +504,6 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 256
-  movementCounter: 0
-  idleCounter: 0
 --- !u!114 &1911147993519579235
 MonoBehaviour:
   m_ObjectHideFlags: 0
