@@ -535,12 +535,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadout:
+  - {fileID: 11400000, guid: cd2dbfd0390f4e44b8a230f24a9c8b34, type: 2}
   - {fileID: 11400000, guid: 5825c9791e3cd964d87f39be9a9f22fb, type: 2}
   weaponParent: {fileID: 1787561024556636675}
   bulletHolePrefab: {fileID: 2418589999511830015, guid: 6b7b5ca1ec4f9f948a75c83a2731e0db, type: 3}
   canBeShot:
     serializedVersion: 2
     m_Bits: 6455
+  isAiming: 0
 --- !u!114 &3482432383363152043
 MonoBehaviour:
   m_ObjectHideFlags: 0

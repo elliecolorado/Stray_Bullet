@@ -22,6 +22,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public LayerMask canBeShot;
 
+        public bool isAiming = false;
+
         private GameObject currentEquipment;
 
         private float currentCooldown = 0;
@@ -48,15 +50,15 @@ namespace Com.Elrecoal.Stray_Bullet
             if (photonView.IsMine)
             {
 
-                if (Input.GetKeyDown(KeyCode.Alpha1)) photonView.RPC("Equip", RpcTarget.All, 0);
+                if (Input.GetKey(KeyCode.Alpha1) && currentIndex != 0)
+                {
+                    photonView.RPC("Equip", RpcTarget.All, 0);
+                }
 
-                if (Input.GetKeyDown(KeyCode.Alpha2)) photonView.RPC("Equip", RpcTarget.All, 1);
-
-                if (Input.GetKeyDown(KeyCode.Alpha3)) photonView.RPC("Equip", RpcTarget.All, 2);
-
-                if (Input.GetKeyDown(KeyCode.Alpha4)) photonView.RPC("Equip", RpcTarget.All, 3);
-
-                if (Input.GetKeyDown(KeyCode.Alpha5)) photonView.RPC("Equip", RpcTarget.All, 4);
+                if (Input.GetKey(KeyCode.Alpha2) && currentIndex != 1)
+                {
+                    photonView.RPC("Equip", RpcTarget.All, 1);
+                }
 
             }
 
@@ -68,15 +70,24 @@ namespace Com.Elrecoal.Stray_Bullet
 
                     Aim(Input.GetMouseButton(1));
 
-                    if (Input.GetMouseButton(0) && currentCooldown <= 0 && !isReloading)
+                    if (loadout[currentIndex].burst != 1)
                     {
-                        if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
-
-                        else if (loadout[currentIndex].GetStash() > 0) StartCoroutine(Reload(loadout[currentIndex].reload));
-
+                        if (Input.GetMouseButtonDown(0) && currentCooldown <= 0 && !isReloading)
+                        {
+                            if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
+                            else if (loadout[currentIndex].GetStash() > 0) StartCoroutine(Reload(loadout[currentIndex].reload));
+                        }
+                    }
+                    else
+                    {
+                        if (Input.GetMouseButton(0) && currentCooldown <= 0 && !isReloading)
+                        {
+                            if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
+                            else if (loadout[currentIndex].GetStash() > 0) StartCoroutine(Reload(loadout[currentIndex].reload));
+                        }
                     }
 
-                    if (Input.GetKeyDown(KeyCode.R) && !isReloading && loadout[currentIndex].GetStash() > 0) StartCoroutine(Reload(loadout[currentIndex].reload));
+                    if (Input.GetKeyDown(KeyCode.R) && !isReloading && loadout[currentIndex].GetStash() > 0 && loadout[currentIndex].GetClip() < loadout[currentIndex].clipSize) StartCoroutine(Reload(loadout[currentIndex].reload));
 
                     //Cooldown
                     if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
@@ -125,7 +136,7 @@ namespace Com.Elrecoal.Stray_Bullet
         [PunRPC]
         void Equip(int p_ind)
         {
-            
+
             //-----------------------------------Usar rueda del rat�n para ciclar entre armas (tener en cuenta final de loadout y volver a empezar o poner el ultimo arma de limite?)-----------------------------------
             if (p_ind < loadout.Length)
             {
@@ -156,6 +167,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         void Aim(bool p_isAiming)
         {
+
+            isAiming = p_isAiming;
 
             Transform t_anchor = currentEquipment.transform.Find("Anchor");
 

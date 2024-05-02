@@ -132,17 +132,18 @@ namespace Com.Elrecoal.Stray_Bullet
                 HeadBob(idleCounter, 0.01f, 0.01f);
                 idleCounter += 0;
                 weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
+
             }
             else if (sliding)
             {
                 //Deslizandose
                 HeadBob(movementCounter, 0.15f, 0.075f);
-                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);
             }
             else if (t_hmove == 0 && t_vmove == 0)
             {
                 //Sin moverse
-                HeadBob(idleCounter, 0.02f, 0.02f);
+                HeadBob(idleCounter, 0.025f, 0.025f);
                 idleCounter += Time.deltaTime;
                 weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
 
@@ -152,14 +153,14 @@ namespace Com.Elrecoal.Stray_Bullet
                 //Andando
                 HeadBob(movementCounter, 0.035f, 0.035f);
                 movementCounter += Time.deltaTime * 6f;
-                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 6f);
             }
             else
             {
                 //Esprintando
-                HeadBob(movementCounter, 0.15f, 0.055f);
+                HeadBob(movementCounter, 0.15f, 0.075f);
                 movementCounter += Time.deltaTime * 13.5f;
-                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);
 
             }
 
@@ -279,7 +280,14 @@ namespace Com.Elrecoal.Stray_Bullet
         void HeadBob(float p_z, float p_x_intensity, float p_y_intensity)
         {
 
-            targetWeaponBobPosition = weaponParentCurrentPosition + new Vector3(Mathf.Cos(p_z) * p_x_intensity, Mathf.Sin(p_z * 2) * p_y_intensity, 0);
+            float t_aim_Adjust = 1f;
+
+            if (weapon.isAiming)
+            {
+                t_aim_Adjust = 0.1f;
+            }
+
+            targetWeaponBobPosition = weaponParentCurrentPosition + new Vector3(Mathf.Cos(p_z) * p_x_intensity * t_aim_Adjust, Mathf.Sin(p_z * 2) * p_y_intensity * t_aim_Adjust, 0);
 
         }
 
