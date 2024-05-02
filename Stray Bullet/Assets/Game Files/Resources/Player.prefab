@@ -489,9 +489,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce90ba3dbd6eba4448102c9382f9d3b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 500
+  speed: 250
   sprintModifier: 2
-  jumpForce: 1000
+  jumpForce: 500
   lengthOfSlide: 1
   slideModifier: 3
   movementCounter: 0

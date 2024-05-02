@@ -9,6 +9,8 @@ namespace Com.Elrecoal.Stray_Bullet
     public class Launcher : MonoBehaviourPunCallbacks
     {
 
+        public int scene;
+
         #region Unity Methods
 
         public void Awake()
@@ -79,7 +81,7 @@ namespace Com.Elrecoal.Stray_Bullet
             {
 
                 //-----------------------------------Modificar segun requisitos (ahora mismo carga la pantalla de DevSpace)-----------------------------------
-                PhotonNetwork.LoadLevel(1); 
+                PhotonNetwork.LoadLevel(scene); 
 
             }
 
