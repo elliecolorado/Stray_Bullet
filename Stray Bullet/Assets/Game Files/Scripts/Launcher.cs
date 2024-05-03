@@ -23,8 +23,6 @@ namespace Com.Elrecoal.Stray_Bullet
         public override void OnConnectedToMaster()
         {
 
-            Join();
-
             base.OnConnectedToMaster();
 
         }

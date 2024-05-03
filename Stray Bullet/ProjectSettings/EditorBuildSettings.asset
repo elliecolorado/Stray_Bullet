@@ -11,10 +11,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game Files/Scenes/DevSpace.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Game Files/Scenes/Levels/Vertigo.unity
-    guid: 36d8bd3b3f489014bb871b519b14672a
-  - enabled: 1
-    path: Assets/Game Files/Scenes/LowPolyFPS_Lite_Demo.unity
-    guid: 130de191e9bf7de41a659f68e5741ed0
   m_configObjects: {}
