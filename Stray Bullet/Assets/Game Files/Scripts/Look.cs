@@ -9,7 +9,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
     public class Look : MonoBehaviourPunCallbacks
     {
-        #region Variables
 
         public static bool cursorLocked = true;
 
@@ -27,9 +26,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private Quaternion camCenter;
 
-        #endregion
-
-        #region Unity Methods
 
         public void Start()
         {
@@ -41,7 +37,7 @@ namespace Com.Elrecoal.Stray_Bullet
         void Update()
         {
 
-            if (!photonView.IsMine) return;
+            if (!photonView.IsMine || Pause.paused) return;
 
             SetX();
 
@@ -51,9 +47,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
-
-        #region Private Methods
 
         void SetY()
         {
@@ -98,13 +91,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
                 Cursor.visible = false;
 
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-
-                    cursorLocked = false;
-
-                }
-
             }
             else
             {
@@ -113,18 +99,10 @@ namespace Com.Elrecoal.Stray_Bullet
 
                 Cursor.visible = true;
 
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-
-                    cursorLocked = true;
-
-                }
-
             }
 
         }
 
-        #endregion
 
     }
 

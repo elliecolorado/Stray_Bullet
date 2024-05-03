@@ -12,7 +12,6 @@ namespace Com.Elrecoal.Stray_Bullet
     public class Weapon : MonoBehaviourPunCallbacks
     {
 
-        #region Variables
 
         public Gun[] loadout;
 
@@ -32,9 +31,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private bool isReloading;
 
-        #endregion
-
-        #region Unity Methods
 
         private void Start()
         {
@@ -47,19 +43,12 @@ namespace Com.Elrecoal.Stray_Bullet
         void Update()
         {
 
+            if (Pause.paused && photonView.IsMine) return;
+
             if (photonView.IsMine)
             {
-
-                if (Input.GetKey(KeyCode.Alpha1) && currentIndex != 0)
-                {
-                    photonView.RPC("Equip", RpcTarget.All, 0);
-                }
-
-                if (Input.GetKey(KeyCode.Alpha2) && currentIndex != 1)
-                {
-                    photonView.RPC("Equip", RpcTarget.All, 1);
-                }
-
+                if (Input.GetKey(KeyCode.Alpha1) && currentIndex != 0 && !isReloading) photonView.RPC("Equip", RpcTarget.All, 0);
+                if (Input.GetKey(KeyCode.Alpha2) && currentIndex != 1 && !isReloading) photonView.RPC("Equip", RpcTarget.All, 1);
             }
 
             if (currentEquipment != null)
@@ -101,9 +90,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
-
-        #region Personal Methods
 
         public void RefreshAmmo(TMP_Text p_text)
         {
@@ -223,7 +209,7 @@ namespace Com.Elrecoal.Stray_Bullet
                     {
 
                         //RpcTarget call to damage player
-                        t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
+                        t_hit.collider.transform.root.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
 
                     }
 
@@ -246,7 +232,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
 
     }
 

@@ -7,6 +7,13 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public Launcher launcher;
 
+        private void Start()
+        {
+            Pause.paused = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
         public void JoinMatch()
         {
 

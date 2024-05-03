@@ -11,7 +11,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public int scene;
 
-        #region Unity Methods
 
         public void Awake()
         {
@@ -45,9 +44,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
-
-        #region Personal Methods
 
         public void Connect()
         {
@@ -85,7 +81,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
 
     }
 

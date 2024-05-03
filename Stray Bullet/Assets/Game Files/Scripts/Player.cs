@@ -4,43 +4,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using System;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
 
-    public class Player : MonoBehaviourPunCallbacks
+    public class Player : MonoBehaviourPunCallbacks, IPunObservable
     {
 
-        #region Variables
-
         public float speed;
-
         public float sprintModifier;
 
         public float jumpForce;
 
         public float lengthOfSlide;
-
         public float slideModifier;
 
         public float movementCounter;
-
         public float idleCounter;
 
         public int max_health;
 
         public Camera normalCam;
-
         public GameObject cameraParent;
 
         public Transform weaponParent;
 
         public Transform groundDetector;
-
         public LayerMask ground;
 
         private float baseFOV;
-
         private float sprintFOVModifier = 1.25f;
 
         private float slide_time;
@@ -69,9 +62,21 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private Vector3 weaponParentCurrentPosition;
 
-        #endregion
+        private float aimAngle;
 
-        #region Unity Methods
+        public void OnPhotonSerializeView(PhotonStream p_stream, PhotonMessageInfo p_message)
+        {
+            if (p_stream.IsWriting) // Si el estream está escribiendo (este objeto saca información)
+            {
+                p_stream.SendNext((int)(weaponParent.transform.localEulerAngles.x * 100f)); // Se manda el angulo del eje 'x' a través del stream
+            }
+            else // Si el estream está leyendo (otro objeto saca información, este objeto la lee)
+            {
+                // Se lee el angulo del eje 'x' que ha mandado otro objeto y se establece como el valor de aimAngle para usarlo al actualizar el ángulo desde la pantalla del jugador actual
+                aimAngle = (int)p_stream.ReceiveNext() / 100f;
+            }
+        }
+
 
         public void Start()
         {
@@ -81,7 +86,12 @@ namespace Com.Elrecoal.Stray_Bullet
             current_health = max_health;
             cameraParent.SetActive(photonView.IsMine);
 
-            if (!photonView.IsMine) gameObject.layer = 11;
+            if (!photonView.IsMine)
+            {
+                gameObject.layer = 11;
+                //standingCollider.layer = 11; Corregir al añadir agachado
+                //crouchingCollider.layer = 11; Corregir al añadir agachado
+            }
 
             baseFOV = normalCam.fieldOfView;
             origin = normalCam.transform.localPosition;
@@ -106,20 +116,47 @@ namespace Com.Elrecoal.Stray_Bullet
         public void Update()
         {
 
-            if (!photonView.IsMine) return;
+            if (!photonView.IsMine) //Si el objeto detectado no es mío
+            {
+                RefreshMultiplayerState(); // Se actualiza la posición del arma en la estancia del juego actual
+                return; // Se sale del método
+            }
+            //En caso de ser el objeto propio (el cual controla el jugador), se ejecuta el resto
 
             // Ejes
-            float t_hmove = Input.GetAxisRaw("Horizontal");
+            float t_hmove = Input.GetAxisRaw("Horizontal"); // Recoge el valor del 'Eje' horizontal y vertical, (
             float t_vmove = Input.GetAxisRaw("Vertical");
 
             // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
             bool jump = Input.GetKeyDown(KeyCode.Space);
+            //bool crouch = Input.GetKeyDown(KeyCode.LeftControl);
+            bool pause = Input.GetKeyDown(KeyCode.Escape);
 
             // Estados
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
             bool isJumping = jump && isGrounded;
             bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
+
+            //Pausa
+            if (pause)
+            {
+                GameObject.Find("Pause").GetComponent<Pause>().TogglePause();
+            }
+
+            if (Pause.paused)
+            {
+                t_hmove = 0f;
+                t_vmove = 0f;
+                sprint = false;
+                jump = false;
+                //crouch = false;
+                pause = false;
+                isGrounded = false;
+                isJumping = false;
+                isSprinting = false;
+                //isCrouching = false;
+            }
 
             // Salto
             if (isJumping) rig.AddForce(Vector3.up * jumpForce);
@@ -171,12 +208,24 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
+        private void RefreshMultiplayerState()
+        {
+            float cacheEulY = weaponParent.localEulerAngles.y; //Guarda la rotación 'Y' actual del arma
+
+            Quaternion targetRotation = Quaternion.identity * Quaternion.AngleAxis(aimAngle, Vector3.right);
+            weaponParent.rotation = Quaternion.Slerp(weaponParent.rotation, targetRotation, Time.deltaTime * 8f);
+
+            Vector3 finalRotation = weaponParent.localEulerAngles;
+            finalRotation.y = cacheEulY; // Establece la 'Y' de la rotación final al valor guardado anteriormente
+
+            weaponParent.localEulerAngles = finalRotation; // Establece el ángulo exacto del arma
+
+        }
+
         private void FixedUpdate()
         {
 
             if (!photonView.IsMine) return;
-
-            if (Input.GetKeyDown(KeyCode.U)) TakeDamage(1001); //Botón temporal para forzar reaparición
 
             // Ejes
             float t_hmove = Input.GetAxisRaw("Horizontal");
@@ -184,7 +233,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
             // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-            bool jump = Input.GetKey(KeyCode.Space);
+            bool jump = Input.GetKeyDown(KeyCode.Space);
             bool slide = Input.GetKey(KeyCode.LeftControl);
 
             // Estados
@@ -192,6 +241,19 @@ namespace Com.Elrecoal.Stray_Bullet
             bool isJumping = jump && isGrounded;
             bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
             bool isSliding = isSprinting && slide && !sliding;
+
+            // Pausa
+            if (Pause.paused)
+            {
+                t_hmove = 0f;
+                t_vmove = 0f;
+                sprint = false;
+                jump = false;
+                isGrounded = false;
+                isJumping = false;
+                isSprinting = false;
+                isSliding = false;
+            }
 
             // Movimiento
             Vector3 t_direction = Vector3.zero;
@@ -265,10 +327,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
-
-        #region Personal Methods
-
         void RefreshHealthBar()
         {
 
@@ -312,7 +370,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         }
 
-        #endregion
     }
 
 }

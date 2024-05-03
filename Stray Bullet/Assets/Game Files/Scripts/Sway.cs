@@ -10,7 +10,6 @@ namespace Com.Elrecoal.Stray_Bullet
     public class Sway : MonoBehaviourPunCallbacks
     {
 
-        #region Variables
 
         public float intensity;
 
@@ -20,9 +19,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
         private Quaternion origin_rotation;
 
-        #endregion
 
-        #region Unity Methods
 
         private void Start()
         {
@@ -34,13 +31,12 @@ namespace Com.Elrecoal.Stray_Bullet
         private void Update()
         {
 
+            if (Pause.paused) return;
+
             UpdateSway();
 
         }
 
-        #endregion
-
-        #region Personal Methods
 
         private void UpdateSway()
         {
@@ -70,8 +66,6 @@ namespace Com.Elrecoal.Stray_Bullet
             transform.localRotation = Quaternion.Lerp(transform.localRotation, target_rotation, Time.deltaTime * smooth);
 
         }
-
-        #endregion
 
     }
 
