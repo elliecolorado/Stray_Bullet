@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
@@ -79,6 +81,16 @@ namespace Com.Elrecoal.Stray_Bullet
 
             }
 
+        }
+
+        public override void OnDisconnected(DisconnectCause cause)
+        {
+            // Si el host se desconecta, cierra la sala y carga la escena del lobby
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                SceneManager.LoadScene("Main Menu");
+            }
         }
 
 

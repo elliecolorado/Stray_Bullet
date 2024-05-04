@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
-    public class Pause : MonoBehaviour
+    public class Pause : MonoBehaviourPunCallbacks
     {
 
         public static bool paused = false;
@@ -30,6 +30,13 @@ namespace Com.Elrecoal.Stray_Bullet
             PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene(0);
         }
+
+        public override void OnLeftRoom()
+        {
+            // Carga la escena del lobby o menú principal
+            SceneManager.LoadScene("Main Menu");
+        }
+
 
     }
 }
