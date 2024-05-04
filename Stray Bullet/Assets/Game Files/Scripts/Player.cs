@@ -360,10 +360,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
                 if (current_health <= 0)
                 {
-
                     manager.Spawn();
                     PhotonNetwork.Destroy(gameObject);
-
                 }
 
             }

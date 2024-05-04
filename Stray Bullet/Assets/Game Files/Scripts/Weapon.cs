@@ -14,23 +14,24 @@ namespace Com.Elrecoal.Stray_Bullet
 
 
         public Gun[] loadout;
+        [HideInInspector] public Gun currentGunData;
 
         public Transform weaponParent;
 
         public GameObject bulletHolePrefab;
-
         public LayerMask canBeShot;
 
         public bool isAiming = false;
 
-        private GameObject currentEquipment;
+        private GameObject currentWeapon;
+        private int currentIndex;
 
         private float currentCooldown = 0;
 
-        private int currentIndex;
 
         private bool isReloading;
 
+        public AudioSource sfx;
 
         private void Start()
         {
@@ -51,7 +52,7 @@ namespace Com.Elrecoal.Stray_Bullet
                 if (Input.GetKey(KeyCode.Alpha2) && currentIndex != 1 && !isReloading) photonView.RPC("Equip", RpcTarget.All, 1);
             }
 
-            if (currentEquipment != null)
+            if (currentWeapon != null)
             {
 
                 if (photonView.IsMine)
@@ -84,7 +85,7 @@ namespace Com.Elrecoal.Stray_Bullet
                 }
 
                 //Weapon position elasticity
-                currentEquipment.transform.localPosition = Vector3.Lerp(currentEquipment.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
+                currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
 
             }
 
@@ -107,13 +108,13 @@ namespace Com.Elrecoal.Stray_Bullet
 
             isReloading = true;
 
-            currentEquipment.SetActive(false);
+            currentWeapon.SetActive(false);
 
             yield return new WaitForSeconds(p_wait);
 
             loadout[currentIndex].Reload();
 
-            currentEquipment.SetActive(true);
+            currentWeapon.SetActive(true);
 
             isReloading = false;
 
@@ -127,12 +128,12 @@ namespace Com.Elrecoal.Stray_Bullet
             if (p_ind < loadout.Length)
             {
 
-                if (currentEquipment != null)
+                if (currentWeapon != null)
                 {
 
                     StopCoroutine("Reload");
 
-                    Destroy(currentEquipment);
+                    Destroy(currentWeapon);
 
                 }
 
@@ -146,7 +147,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
                 t_newEquipment.GetComponent<Sway>().isMine = photonView.IsMine;
 
-                currentEquipment = t_newEquipment;
+                currentWeapon = t_newEquipment;
+                currentGunData = loadout[p_ind];
             }
 
         }
@@ -156,11 +158,11 @@ namespace Com.Elrecoal.Stray_Bullet
 
             isAiming = p_isAiming;
 
-            Transform t_anchor = currentEquipment.transform.Find("Anchor");
+            Transform t_anchor = currentWeapon.transform.Find("Anchor");
 
-            Transform t_state_ads = currentEquipment.transform.Find("States/ADS");
+            Transform t_state_ads = currentWeapon.transform.Find("States/ADS");
 
-            Transform t_state_hip = currentEquipment.transform.Find("States/Hip");
+            Transform t_state_hip = currentWeapon.transform.Find("States/Hip");
 
             if (p_isAiming) t_anchor.position = Vector3.Lerp(t_anchor.position, t_state_ads.position, Time.deltaTime * loadout[currentIndex].aimSpeed);
 
@@ -174,54 +176,59 @@ namespace Com.Elrecoal.Stray_Bullet
 
             Transform t_spawn = transform.Find("Cameras/Normal Camera");
 
-            //Bloom
-            Vector3 t_bloom = t_spawn.position + t_spawn.forward * 1000f;
-
-            t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
-
-            t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
-
-            t_bloom -= t_spawn.position;
-
-            t_bloom.Normalize();
-
             //Cooldown (segundos que tarda en poder volver a disparar)
             currentCooldown = loadout[currentIndex].rateOfFire;
 
-            //Raycast
-            RaycastHit t_hit = new RaycastHit();
-
-            if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
+            for (int i = 0; i < Mathf.Max(1,currentGunData.pellets); i++)
             {
-                //-----------------------------------Modificar si a�ado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
-                //-----------------------------------Modificar para que las balas no se pongan en la cara de los jugadores y solucionar el que apunte siempre hacia delante-----------------------------------
-                GameObject t_newBulletHole = Instantiate(bulletHolePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
+                //Bloom
+                Vector3 t_bloom = t_spawn.position + t_spawn.forward * 1000f;
+                t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
+                t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
+                t_bloom -= t_spawn.position;
+                t_bloom.Normalize();
 
-                t_newBulletHole.transform.LookAt(t_hit.point + t_hit.normal);
+                //Raycast
+                RaycastHit t_hit = new RaycastHit();
 
-                Destroy(t_newBulletHole, 5);
-
-                if (photonView.IsMine)
+                if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
                 {
+                    //-----------------------------------Modificar si a�ado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
+                    //-----------------------------------Modificar para que las balas no se pongan en la cara de los jugadores y solucionar el que apunte siempre hacia delante-----------------------------------
+                    GameObject t_newBulletHole = Instantiate(bulletHolePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
 
-                    //Shooting a player
-                    if (t_hit.collider.gameObject.layer == 11)
+                    t_newBulletHole.transform.LookAt(t_hit.point + t_hit.normal);
+
+                    Destroy(t_newBulletHole, 5);
+
+                    if (photonView.IsMine)
                     {
 
-                        //RpcTarget call to damage player
-                        t_hit.collider.transform.root.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
+                        //Shooting a player
+                        if (t_hit.collider.gameObject.layer == 11)
+                        {
+
+                            //RpcTarget call to damage player
+                            t_hit.collider.transform.root.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
+
+                        }
 
                     }
 
                 }
-
             }
 
+            //Sound
+            sfx.Stop();
+            sfx.clip = currentGunData.gunShotSound;
+            sfx.pitch = 1 - currentGunData.pitchRandomization + Random.Range(-currentGunData.pitchRandomization, currentGunData.pitchRandomization);
+            sfx.volume = currentGunData.gunShotVolume;
+            sfx.Play();
+
             //Gun effect
-            currentEquipment.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
-
-            currentEquipment.transform.position -= currentEquipment.transform.forward * loadout[currentIndex].kickback;
-
+            currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
+            currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
+            //if (currentGunData.recovery) currentWeapon.GetComponent<Animator>().Play("Recovery", 0, 0); Añadir cuando añada animaciones de "recuperacion"
         }
 
         [PunRPC]

@@ -10,20 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56e41bfa77ea0fd4cbc8634e6809ab7f, type: 3}
-  m_Name: Machine Gun
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  name: Machine Gun
-  damage: 100
-  bloom: 20
+  name: Shotgun
+  damage: 150
+  bloom: 40
   reload: 2.5
   ammo: 150
-  clipSize: 32
-  recoil: 4
-  kickback: 0.05
-  rateOfFire: 0.1
+  clipSize: 2
+  recoil: 15
+  kickback: 0.2
+  rateOfFire: 0.5
   aimSpeed: 7
-  prefab: {fileID: 526022236397120295, guid: bf020b6bc5286284baeb6a952aceeeb3, type: 3}
+  prefab: {fileID: 526022236397120295, guid: f0fee94edd32d214497b892a45fd04af, type: 3}
   gunShotSound: {fileID: 8300000, guid: a9c4f3f6d909d564e9b35ab1e11d7608, type: 3}
   gunShotVolume: 50
   pitchRandomization: 0.2
-  burst: 1
+  burst: 0
+  pellets: 10
+  recovery: 0

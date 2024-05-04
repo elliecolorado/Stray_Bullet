@@ -32,11 +32,21 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public GameObject prefab;
 
-        public int burst = 0; // 0 semi | 1 auto | 2+ ráfaga
+        public AudioClip gunShotSound;
+
+        public float gunShotVolume;
+
+        public float pitchRandomization;
+
+        public int burst; // 0 semi | 1 auto | 2+ ráfaga?
 
         private int stash; //Current ammo
 
         private int clip; //Current clip
+
+        public int pellets;
+
+        public bool recovery; //Variable para animaciones
 
         public void Init()
         {
