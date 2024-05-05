@@ -6,9 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game Files/Scenes/Main Menu.unity
+    path: Assets/Game Files/Scenes/Menus/Main Menu.unity
     guid: 492a65237bd1cb34294ed6d63aebf150
   - enabled: 1
-    path: Assets/Game Files/Scenes/DevSpace.unity
+    path: Assets/Game Files/Scenes/Maps/Dev Space.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/Stats.unity
+    guid: b8854cedf47cc464ea2e289a99b8d045
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/Settings.unity
+    guid: 00609470fff734347b78b44c08aa4298
   m_configObjects: {}
