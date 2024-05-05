@@ -48,6 +48,8 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public bool recovery; //Variable para animaciones
 
+        public float aimBloomDivider;
+
         public void Init()
         {
 

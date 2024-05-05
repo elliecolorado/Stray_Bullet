@@ -174,17 +174,26 @@ namespace Com.Elrecoal.Stray_Bullet
         void Shoot()
         {
 
-            Transform t_spawn = transform.Find("Cameras/Normal Camera");
+            Transform t_spawn = transform.Find("Weapon");
 
             //Cooldown (segundos que tarda en poder volver a disparar)
             currentCooldown = loadout[currentIndex].rateOfFire;
 
-            for (int i = 0; i < Mathf.Max(1,currentGunData.pellets); i++)
+            for (int i = 0; i < Mathf.Max(1, currentGunData.pellets); i++)
             {
                 //Bloom
                 Vector3 t_bloom = t_spawn.position + t_spawn.forward * 1000f;
-                t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
-                t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
+                if (isAiming)
+                {
+                    t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up / loadout[currentIndex].aimBloomDivider;
+                    t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right / loadout[currentIndex].aimBloomDivider;
+                }
+                else
+                {
+                    t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
+                    t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
+                }
+
                 t_bloom -= t_spawn.position;
                 t_bloom.Normalize();
 
@@ -193,8 +202,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
                 if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
                 {
-                    //-----------------------------------Modificar si a�ado explosivos para que sean diferentes agujeros de bala/explosivo-----------------------------------
-                    //-----------------------------------Modificar para que las balas no se pongan en la cara de los jugadores y solucionar el que apunte siempre hacia delante-----------------------------------
+                    //-----------------------------------Modificar para que las balas no se pongan en la cara de los jugadores-----------------------------------
                     GameObject t_newBulletHole = Instantiate(bulletHolePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
 
                     t_newBulletHole.transform.LookAt(t_hit.point + t_hit.normal);

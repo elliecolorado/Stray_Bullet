@@ -27,3 +27,6 @@ MonoBehaviour:
   gunShotVolume: 50
   pitchRandomization: 0.2
   burst: 1
+  pellets: 0
+  recovery: 0
+  aimBloomDivider: 2
