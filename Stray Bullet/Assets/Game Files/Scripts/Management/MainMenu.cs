@@ -18,11 +18,12 @@ namespace Com.Elrecoal.Stray_Bullet
         public void JoinMatch() { launcher.Join(); }
         public void CreateMatch() { launcher.Create(); }
         public void QuitGame() { Application.Quit(); }
-        public void Settings() { SceneManager.LoadScene("Settings"); }
-        public void Stats() { SceneManager.LoadScene("Stats"); }
+        public void Settings() { SceneManager.LoadScene("SettingsMenu"); }
+        public void Stats() { SceneManager.LoadScene("StatsMenu"); }
+        public void Play() { SceneManager.LoadScene("PlayMenu"); }
 
         //Secondary menus
-        public void ReturnToMainMenu() { SceneManager.LoadScene("Main Menu"); }
+        public void ReturnToMainMenu() { SceneManager.LoadScene("MainMenu"); }
 
     }
 

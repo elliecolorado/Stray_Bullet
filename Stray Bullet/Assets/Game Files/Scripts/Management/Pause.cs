@@ -31,7 +31,7 @@ namespace Com.Elrecoal.Stray_Bullet
         public override void OnLeftRoom()
         {
             // Carga la escena del lobby o menú principal
-            SceneManager.LoadScene("Main Menu");
+            SceneManager.LoadScene("MainMenu");
         }
 
 
