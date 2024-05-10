@@ -2,31 +2,22 @@ using System;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
+    [System.Serializable]
     public class User
     {
         public int id;
+        public string username;
+        public string password;
 
-        public string email; //User username
-
-        public string username; //User's username (let it be changed or not? If yes, update on database)
-        
         public int level;
-
         public int exp;
 
-        public string password; //User's password
+        public int wins;
+        public int loses;
+        public int total_matches;
 
-        public DateTime signup_date;//Unchangeable data, registers when did the player create the user
-
-        public int wins;//Every time a match ends (winning) it increases
-
-        public int loses; ////Every time a match ends (losing) it increases
-
-        public int total_matches; //Every time a match ends it increases
-
+        public float[] last_10_kds = new float[10]; //Every time a match ends, kills is divided by deaths and the result is added here to calculate the average of last 10 matches
         public float total_average_kd; //It's the average from all the numbers in average_kds
-
-        public float[] average_kds; //Every time a match ends, kills is divided by deaths and the result is added here
 
         public User(string username, int level, int xp)
         {
@@ -40,5 +31,18 @@ namespace Com.Elrecoal.Stray_Bullet
             this.level = 0;
             this.exp = 0;
         }
+
+        public void UpdateAverageKD(float kdNuevo)
+        {
+
+            for (int i = last_10_kds.Length - 1; i > 0; i--) last_10_kds[i] = last_10_kds[i - 1];
+            last_10_kds[0] = kdNuevo;
+
+            float sum = 0;
+            for (int i = 0; i < last_10_kds.Length; i++) sum += last_10_kds[i];
+            total_average_kd = sum / last_10_kds.Length;
+
+        }
+
     }
 }

@@ -183,8 +183,8 @@ namespace Com.Elrecoal.Stray_Bullet
             if (!photonView.IsMine) return;
 
             // Ejes
-            float t_hmove = Input.GetAxisRaw("Horizontal");
-            float t_vmove = Input.GetAxisRaw("Vertical");
+            float t_hmove = Input.GetAxis("Horizontal");
+            float t_vmove = Input.GetAxis("Vertical");
 
             // Controles
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);

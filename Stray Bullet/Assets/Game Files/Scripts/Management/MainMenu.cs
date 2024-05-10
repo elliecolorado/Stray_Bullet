@@ -21,6 +21,7 @@ namespace Com.Elrecoal.Stray_Bullet
         public void Settings() { SceneManager.LoadScene("SettingsMenu"); }
         public void Stats() { SceneManager.LoadScene("StatsMenu"); }
         public void Play() { SceneManager.LoadScene("PlayMenu"); }
+        public void CreateMatchMenu() { SceneManager.LoadScene("CreateMatchMenu"); }
 
         //Secondary menus
         public void ReturnToMainMenu() { SceneManager.LoadScene("MainMenu"); }

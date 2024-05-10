@@ -837,7 +837,6 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 256
-  playerUsername: {fileID: 9102272228558041499}
 --- !u!114 &1911147993519579235
 MonoBehaviour:
   m_ObjectHideFlags: 0

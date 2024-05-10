@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
@@ -13,48 +14,127 @@ namespace Com.Elrecoal.Stray_Bullet
         public TMP_InputField usernameField;
         //Recordatorio: Static se usa para poder acceder al atributo sin instanciar la clase (en este caso, acceder a myProfile sin instanciar un objeto Launcher) para poder acceder a ello desde escenas diferentes a la de main menu o settings
         public static User myProfile = new User();
+        public TMP_InputField roomNameField;
+        public Slider maxPlayersSlider;
+        public TMP_Text maxPlayersValue;
+        public TMP_Text mapValue;
+        public GameObject matchNotFoundError;
+        public Map[] maps;
+        private int currentMap = 0;
+
+        public TMP_Text userNameText;
+        public TMP_Text userLevelText;
+        public TMP_Text userXpText;
+
         public void Awake()
         {
+
             PhotonNetwork.AutomaticallySyncScene = true;
-            if (usernameField != null) usernameField.text = myProfile.username;
+            myProfile = Data.LoadProfile();
             Connect();
+
+            if (roomNameField != null && mapValue != null && maxPlayersSlider != null && maxPlayersValue != null)
+            {
+                roomNameField.text = "";
+
+                currentMap = 0;
+                mapValue.text = "Mapa: " + maps[currentMap].name;
+
+                maxPlayersSlider.value = maxPlayersSlider.maxValue;
+                maxPlayersValue.text = Mathf.RoundToInt(maxPlayersSlider.value).ToString();
+            }
+            if (usernameField != null) usernameField.text = myProfile.username;
+            if (userLevelText != null && userXpText != null)
+            {
+                userLevelText.text = "Nivel: " + myProfile.level;
+                userXpText.text = "XP: " + myProfile.exp + " / " + 100 * (1 + myProfile.level);
+            }
+            if (userNameText != null) userNameText.text = myProfile.username;
+
+
         }
-        public override void OnConnectedToMaster() { base.OnConnectedToMaster(); }
+
+        public override void OnConnectedToMaster()
+        {
+            Debug.Log("Connected");
+
+            PhotonNetwork.JoinLobby();
+            base.OnConnectedToMaster();
+        }
+
         public override void OnJoinedRoom()
         {
             StartGame();
             base.OnJoinedRoom();
         }
+
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
-            Create();
+            matchNotFoundError.SetActive(true);
             base.OnJoinRandomFailed(returnCode, message);
         }
+
         public void Connect()
         {
-            PhotonNetwork.GameVersion = "0.9.2.2";
+            Debug.Log("Connecting...");
+            PhotonNetwork.GameVersion = "0.0.0.0";
             PhotonNetwork.ConnectUsingSettings();
         }
-        public void Join() { PhotonNetwork.JoinRandomRoom(); }
-        public void Create() { PhotonNetwork.CreateRoom("Sala de " + myProfile.username); }
+
+        public void Join()
+        {
+            PhotonNetwork.JoinRandomRoom();
+        }
+
+        public void Create()
+        {
+            RoomOptions options = new RoomOptions();
+            options.MaxPlayers = (byte)maxPlayersSlider.value;
+
+            options.CustomRoomPropertiesForLobby = new string[] { "map" };
+
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+            properties.Add("map", currentMap);
+            options.CustomRoomProperties = properties;
+
+            PhotonNetwork.CreateRoom(roomNameField.text, options);
+        }
+
+        public void ChangeMap()
+        {
+            currentMap++;
+            if (currentMap >= maps.Length) currentMap = 0;
+            mapValue.text = "Mapa: " + maps[currentMap].name;
+        }
+
+        public void changeMaxPlayersSlider(float t_value)
+        {
+            maxPlayersValue.text = Mathf.RoundToInt(t_value).ToString();
+        }
+
+
         public void StartGame()
         {
             if (string.IsNullOrEmpty(myProfile.username))
             {
                 myProfile.username = "RANDOM_USER_" + Random.Range(1, 9999);
             }
-            //-----------------------------------Modificar segun parámetros (ahora mismo carga la pantalla de DevSpace por defecto, dar la posibilidad de elegir mapa)-----------------------------------
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1) PhotonNetwork.LoadLevel("Dev Space");
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                PhotonNetwork.LoadLevel(maps[currentMap].name);
+            }
         }
+
         public override void OnDisconnected(DisconnectCause cause)
         {
             // Si el host se desconecta, cierra la sala y carga la escena del menu principal
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-                SceneManager.LoadScene("Main Menu");
+                SceneManager.LoadScene("MainMenu");
             }
         }
+
         public void SaveSettings()
         {
             //-----------------------------------
@@ -63,6 +143,8 @@ namespace Com.Elrecoal.Stray_Bullet
             if (string.IsNullOrEmpty(usernameField.text)) myProfile.username = "RANDOM_USER_" + Random.Range(1, 9999);
             else myProfile.username = usernameField.text;
             usernameField.text = myProfile.username;
+            Data.SaveProfile(myProfile);
         }
+
     }
 }
