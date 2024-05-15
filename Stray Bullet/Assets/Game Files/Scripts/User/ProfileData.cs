@@ -3,34 +3,35 @@ using System;
 namespace Com.Elrecoal.Stray_Bullet
 {
     [System.Serializable]
-    public class User
+    public class ProfileData
     {
-        public int id;
-        public string username;
-        public string password;
 
+        public string username;
         public int level;
         public int exp;
 
-        public int wins;
-        public int loses;
-        public int total_matches;
-
-        public float[] last_10_kds = new float[10]; //Every time a match ends, kills is divided by deaths and the result is added here to calculate the average of last 10 matches
-        public float total_average_kd; //It's the average from all the numbers in average_kds
-
-        public User(string username, int level, int xp)
+        public ProfileData(string username, int level, int xp)
         {
             this.username = username;
             this.level = level;
             this.exp = xp;
         }
-        public User()
+        public ProfileData()
         {
             this.username = "";
             this.level = 0;
             this.exp = 0;
         }
+
+        /*
+        ----------Implementar más tarde----------
+        public int id;
+        public string password;
+        public int wins;
+        public int loses;
+        public int total_matches;
+        public float[] last_10_kds = new float[10]; //Every time a match ends, kills is divided by deaths and the result is added here to calculate the average of last 10 matches
+        public float total_average_kd; //It's the average from all the numbers in average_kds
 
         public void UpdateAverageKD(float kdNuevo)
         {
@@ -43,6 +44,7 @@ namespace Com.Elrecoal.Stray_Bullet
             total_average_kd = sum / last_10_kds.Length;
 
         }
+        */
 
     }
 }

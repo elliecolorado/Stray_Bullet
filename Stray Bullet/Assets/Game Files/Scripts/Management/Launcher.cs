@@ -12,8 +12,7 @@ namespace Com.Elrecoal.Stray_Bullet
     public class Launcher : MonoBehaviourPunCallbacks
     {
         public TMP_InputField usernameField;
-        //Recordatorio: Static se usa para poder acceder al atributo sin instanciar la clase (en este caso, acceder a myProfile sin instanciar un objeto Launcher) para poder acceder a ello desde escenas diferentes a la de main menu o settings
-        public static User myProfile = new User();
+        public static ProfileData myProfile = new ProfileData();
         public TMP_InputField roomNameField;
         public Slider maxPlayersSlider;
         public TMP_Text maxPlayersValue;

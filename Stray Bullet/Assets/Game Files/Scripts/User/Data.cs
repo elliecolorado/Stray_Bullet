@@ -10,7 +10,7 @@ namespace Com.Elrecoal.Stray_Bullet
 {
     public class Data : MonoBehaviour
     {
-        public static void SaveProfile(User t_user)
+        public static void SaveProfile(ProfileData t_user)
         {
             try
             {
@@ -31,10 +31,10 @@ namespace Com.Elrecoal.Stray_Bullet
             }
         }
 
-        public static User LoadProfile()
+        public static ProfileData LoadProfile()
         {
 
-            User ret = new User();
+            ProfileData ret = new ProfileData();
 
             try
             {
@@ -44,7 +44,7 @@ namespace Com.Elrecoal.Stray_Bullet
                 {
                     FileStream file = File.Open(path, FileMode.Open);
                     BinaryFormatter bf = new BinaryFormatter();
-                    ret = (User)bf.Deserialize(file);
+                    ret = (ProfileData)bf.Deserialize(file);
                 }
             }
             finally

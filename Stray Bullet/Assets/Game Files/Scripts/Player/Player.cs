@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 
+
 namespace Com.Elrecoal.Stray_Bullet
 {
     public class Player : MonoBehaviourPunCallbacks, IPunObservable
