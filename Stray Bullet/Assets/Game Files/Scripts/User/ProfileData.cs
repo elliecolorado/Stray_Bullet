@@ -5,8 +5,8 @@ namespace Com.Elrecoal.Stray_Bullet
     [System.Serializable]
     public class ProfileData
     {
-
         public string username;
+        public string signup_date;
         public int level;
         public int exp;
 
@@ -16,17 +16,15 @@ namespace Com.Elrecoal.Stray_Bullet
             this.level = level;
             this.exp = xp;
         }
+
         public ProfileData()
         {
-            this.username = "";
-            this.level = 0;
-            this.exp = 0;
         }
+
+
 
         /*
         ----------Implementar más tarde----------
-        public int id;
-        public string password;
         public int wins;
         public int loses;
         public int total_matches;

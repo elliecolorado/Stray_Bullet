@@ -24,6 +24,7 @@ namespace Com.Elrecoal.Stray_Bullet
         public TMP_Text userNameText;
         public TMP_Text userLevelText;
         public TMP_Text userXpText;
+        public TMP_Text userSignupDate;
 
         public void Awake()
         {
@@ -43,10 +44,11 @@ namespace Com.Elrecoal.Stray_Bullet
                 maxPlayersValue.text = Mathf.RoundToInt(maxPlayersSlider.value).ToString();
             }
             if (usernameField != null) usernameField.text = myProfile.username;
-            if (userLevelText != null && userXpText != null)
+            if (userLevelText != null && userXpText != null && userSignupDate != null)
             {
                 userLevelText.text = "Nivel: " + myProfile.level;
                 userXpText.text = "XP: " + myProfile.exp + " / " + 100 * (1 + myProfile.level);
+                userSignupDate.text = "Fecha de registro: " + myProfile.signup_date;
             }
             if (userNameText != null) userNameText.text = myProfile.username;
 

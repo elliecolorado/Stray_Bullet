@@ -5,14 +5,21 @@ namespace Com.Elrecoal.Stray_Bullet
 {
     public class MainMenu : MonoBehaviour
     {
+
         public Launcher launcher;
 
-        //Main menu
         private void Start()
         {
             Pause.paused = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+
+        public void LogOut()
+        {
+            Launcher.myProfile = new ProfileData();
+            Data.SaveProfile(Launcher.myProfile);
+            SceneManager.LoadScene("LogInMenu");
         }
 
         public void JoinMatch() { launcher.Join(); }
@@ -22,8 +29,6 @@ namespace Com.Elrecoal.Stray_Bullet
         public void Stats() { SceneManager.LoadScene("StatsMenu"); }
         public void Play() { SceneManager.LoadScene("PlayMenu"); }
         public void CreateMatchMenu() { SceneManager.LoadScene("CreateMatchMenu"); }
-
-        //Secondary menus
         public void ReturnToMainMenu() { SceneManager.LoadScene("MainMenu"); }
 
     }
