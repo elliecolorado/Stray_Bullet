@@ -73,7 +73,7 @@ namespace Com.Elrecoal.Stray_Bullet
         public void Connect()
         {
             Debug.Log("Connecting...");
-            PhotonNetwork.GameVersion = "0.0.0.0";
+            PhotonNetwork.GameVersion = "1.1.1.0";
             PhotonNetwork.ConnectUsingSettings();
         }
 
