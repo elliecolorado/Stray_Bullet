@@ -4,5 +4,32 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/Session/LogInMenu.unity
+    guid: 7c016699f502ebd478fdfe70e4f5d69a
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/Session/SignUpMenu.unity
+    guid: 21e198db648bf0f43a36cd3d6ac5fe51
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/MainMenu.unity
+    guid: 492a65237bd1cb34294ed6d63aebf150
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/SubMenus/PlayMenu.unity
+    guid: 50fa2ebd37ac7084b818dbd581efd26f
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/SubMenus/CreateMatchMenu.unity
+    guid: ac33559f17eca6c44927dfe334b4c039
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/SubMenus/SettingsMenu.unity
+    guid: 00609470fff734347b78b44c08aa4298
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Menus/SubMenus/StatsMenu.unity
+    guid: b8854cedf47cc464ea2e289a99b8d045
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Maps/DevSpace.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Game Files/Scenes/Maps/Mirage.unity
+    guid: 69ad9f35fe55e0843bac744260b15beb
   m_configObjects: {}
