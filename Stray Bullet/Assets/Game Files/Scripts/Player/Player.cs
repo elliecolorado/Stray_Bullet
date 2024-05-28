@@ -286,6 +286,7 @@ namespace Com.Elrecoal.Stray_Bullet
                     //-----------------------------------Se rellenan todas las armas al matar a alguien (supongo que al respawnear pone la munición a su valor inicial y por accidente lo aplica a todo)-----------------------------------
                     manager.Spawn(); 
                     PhotonNetwork.Destroy(gameObject);
+                    Launcher.myProfile.deaths += 1;
                 }
             }
         }

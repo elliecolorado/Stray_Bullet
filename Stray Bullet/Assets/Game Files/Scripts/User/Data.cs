@@ -1,7 +1,3 @@
-using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -10,6 +6,9 @@ namespace Com.Elrecoal.Stray_Bullet
 {
     public class Data : MonoBehaviour
     {
+
+        //TODO Modificar para que suba/baje datos del servidor
+
         public static void SaveProfile(ProfileData t_user)
         {
             try

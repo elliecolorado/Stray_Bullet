@@ -25,7 +25,8 @@ namespace Com.Elrecoal.Stray_Bullet
         {
             disconnecting = true;
             PhotonNetwork.LeaveRoom();
-            SceneManager.LoadScene(0);
+            Launcher.myProfile.played_matches += 1;
+            SceneManager.LoadScene("MainMenu");
         }
 
         public override void OnLeftRoom()

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -11,7 +9,6 @@ namespace Com.Elrecoal.Stray_Bullet
 {
     public class Launcher : MonoBehaviourPunCallbacks
     {
-        public TMP_InputField usernameField;
         public static ProfileData myProfile = new ProfileData();
         public TMP_InputField roomNameField;
         public Slider maxPlayersSlider;
@@ -22,20 +19,19 @@ namespace Com.Elrecoal.Stray_Bullet
         private int currentMap = 0;
 
         public TMP_Text userNameText;
-        public TMP_Text userLevelText;
-        public TMP_Text userXpText;
+        public TMP_Text userDeathsText;
+        public TMP_Text userPlayedMatchesText;
         public TMP_Text userSignupDate;
 
         public void Awake()
         {
 
             PhotonNetwork.AutomaticallySyncScene = true;
-            myProfile = Data.LoadProfile();
             Connect();
 
             if (roomNameField != null && mapValue != null && maxPlayersSlider != null && maxPlayersValue != null)
             {
-                roomNameField.text = "";
+                roomNameField.text = "Nombre por defecto";
 
                 currentMap = 0;
                 mapValue.text = "Mapa: " + maps[currentMap].name;
@@ -43,11 +39,10 @@ namespace Com.Elrecoal.Stray_Bullet
                 maxPlayersSlider.value = maxPlayersSlider.maxValue;
                 maxPlayersValue.text = Mathf.RoundToInt(maxPlayersSlider.value).ToString();
             }
-            if (usernameField != null) usernameField.text = myProfile.username;
-            if (userLevelText != null && userXpText != null && userSignupDate != null)
+            if (userDeathsText != null && userPlayedMatchesText != null && userSignupDate != null)
             {
-                userLevelText.text = "Nivel: " + myProfile.level;
-                userXpText.text = "XP: " + myProfile.exp + " / " + 100 * (1 + myProfile.level);
+                userDeathsText.text = "Muertes: " + myProfile.deaths;
+                userPlayedMatchesText.text = "Partidas totales: " + myProfile.played_matches;
                 userSignupDate.text = "Fecha de registro: " + myProfile.signup_date;
             }
             if (userNameText != null) userNameText.text = myProfile.username;
@@ -116,10 +111,6 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public void StartGame()
         {
-            if (string.IsNullOrEmpty(myProfile.username))
-            {
-                myProfile.username = "RANDOM_USER_" + Random.Range(1, 9999);
-            }
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
                 PhotonNetwork.LoadLevel(maps[currentMap].name);
@@ -138,13 +129,7 @@ namespace Com.Elrecoal.Stray_Bullet
 
         public void SaveSettings()
         {
-            //-----------------------------------
-            //Modificar (que el nombre de usuario sea por defecto el que se introduce al registrarse)
-            //-----------------------------------
-            if (string.IsNullOrEmpty(usernameField.text)) myProfile.username = "RANDOM_USER_" + Random.Range(1, 9999);
-            else myProfile.username = usernameField.text;
-            usernameField.text = myProfile.username;
-            Data.SaveProfile(myProfile);
+            Data.SaveProfile(myProfile); //Guarda el perfil en un archivo local
         }
 
     }

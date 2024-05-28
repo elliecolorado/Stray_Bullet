@@ -8,7 +8,7 @@ namespace Com.Elrecoal.Stray_Bullet
     public class Gun : ScriptableObject
     {
 
-        public string name;
+        public string gunName;
 
         public int damage;
 

@@ -36,7 +36,7 @@ public class SessionManager : MonoBehaviour
             {
                 if (www.downloadHandler.text == "success")
                 {
-                    messageText.text = "Registro exitoso, inicia sesión para continuar.";
+                    messageText.text = "Registro exitoso. Inicia sesion para continuar.";
                 }
                 else if (www.downloadHandler.text == "user_exists")
                 {
@@ -73,7 +73,8 @@ public class SessionManager : MonoBehaviour
                 else
                 {
                     // Parse JSON response to ProfileData object
-                    Data.SaveProfile(JsonUtility.FromJson<ProfileData>(www.downloadHandler.text));
+                    Launcher.myProfile = JsonUtility.FromJson<ProfileData>(www.downloadHandler.text);
+                    Data.SaveProfile(Launcher.myProfile);
                     SceneManager.LoadScene("MainMenu");
                 }
             }

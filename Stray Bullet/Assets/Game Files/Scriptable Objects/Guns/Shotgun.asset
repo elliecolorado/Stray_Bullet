@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e41bfa77ea0fd4cbc8634e6809ab7f, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  name: Shotgun
+  gunName: Shotgun
   damage: 150
   bloom: 40
   reload: 2.5

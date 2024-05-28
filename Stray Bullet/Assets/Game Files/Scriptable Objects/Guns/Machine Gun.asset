@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e41bfa77ea0fd4cbc8634e6809ab7f, type: 3}
   m_Name: Machine Gun
   m_EditorClassIdentifier: 
-  name: Machine Gun
+  gunName: Machine Gun
   damage: 100
   bloom: 20
   reload: 2.5

@@ -264,8 +264,8 @@ MonoBehaviour:
   matchNotFoundError: {fileID: 0}
   maps: []
   userNameText: {fileID: 0}
-  userLevelText: {fileID: 1346597710685853956}
-  userXpText: {fileID: 8266887295780335735}
+  userDeathsText: {fileID: 1346597710685853956}
+  userPlayedMatchesText: {fileID: 8266887295780335735}
   userSignupDate: {fileID: 1092936090}
 --- !u!4 &905808679
 Transform:
@@ -1192,7 +1192,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Nivel: 0'
+  m_text: 'Muertes: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1407,7 +1407,7 @@ GameObject:
   - component: {fileID: 9098866467560386876}
   - component: {fileID: 1346597710685853956}
   m_Layer: 5
-  m_Name: Level
+  m_Name: Deaths
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1433,7 +1433,7 @@ GameObject:
   - component: {fileID: 4429114933291232313}
   - component: {fileID: 8266887295780335735}
   m_Layer: 5
-  m_Name: Experience
+  m_Name: Played matches
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1459,7 +1459,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'XP: 0 / 100'
+  m_text: 'Partidas jugadas:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1486,7 +1486,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 64.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

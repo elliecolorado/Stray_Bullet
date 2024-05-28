@@ -1,14 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using Photon.Pun;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
 
 namespace Com.Elrecoal.Stray_Bullet
 {
