@@ -1,3 +1,4 @@
 # Stray-Bullet
 Proyecto de fin de grado de Ellie Rebeca Colorado Alvarado.
-El juego será innaccesible si el servidor (el portátil personal en el que está alojado) está apagado, ya que no se podrá iniciar sesión y registrarse.
+ Videojuego de disparos en primera persona con base de datos de usuarios, realizado como Trabajo de Fin de Grado del CFGS de DAM. Se  
+ Base de datos actualmente fuera de línea.
